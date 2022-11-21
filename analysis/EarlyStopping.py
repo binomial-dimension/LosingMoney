@@ -40,7 +40,7 @@ class EarlyStopping:
             self.best_score = score
             self.save_checkpoint(val_loss, model)
             self.counter = 0
- 
+
     def save_checkpoint(self, val_loss, model):
         '''
         Saves model when validation loss decrease.
