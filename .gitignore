@@ -1,4 +1,5 @@
 reference/
-model/
+model/*pth
 analysis/graph/*
 analysis/checkpoint.pth
+*.pyc
