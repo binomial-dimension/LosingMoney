@@ -4,3 +4,4 @@ model/log
 analysis/graph/*
 analysis/checkpoint.pth
 *.pyc
+*.pth

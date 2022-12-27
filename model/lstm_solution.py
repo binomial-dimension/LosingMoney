@@ -14,7 +14,7 @@ frame = 'pytorch'
 
 class Config:
     # 数据参数
-    feature_columns = list(range(1, 22))     # 要作为feature的列，按原数据从0开始计算，也可以用list 如 [2,4,6,8] 设置
+    feature_columns = list(range(1, 40))     # 要作为feature的列，按原数据从0开始计算，也可以用list 如 [2,4,6,8] 设置
     label_columns = [3,4]                  # 要预测的列，按原数据从0开始计算, 如同时预测第四，五列 最低价和最高价
     # label_in_feature_index = [feature_columns.index(i) for i in label_columns]  # 这样写不行
     label_in_feature_index = (lambda x,y: [x.index(i) for i in y])(feature_columns, label_columns)  # 因为feature不一定从0开始
@@ -25,25 +25,25 @@ class Config:
     input_size = len(feature_columns)
     output_size = len(label_columns)
 
-    hidden_size = 128           # LSTM的隐藏层大小，也是输出大小
-    lstm_layers = 2             # LSTM的堆叠层数
+    hidden_size = 200           # LSTM的隐藏层大小，也是输出大小
+    lstm_layers =  2            # LSTM的堆叠层数
     dropout_rate = 0.2          # dropout概率
     time_step = 40              # 这个参数很重要，是设置用前多少天的数据来预测，也是LSTM的time step数，请保证训练数据量大于它
 
     # 训练参数
     do_train = True
     do_predict = True
-    add_train = False           # 是否载入已有模型参数进行增量训练
+    add_train = False          # 是否载入已有模型参数进行增量训练
     shuffle_train_data = True   # 是否对训练数据做shuffle
-    use_cuda = False            # 是否使用GPU训练
+    use_cuda = True           # 是否使用GPU训练
 
-    train_data_rate = 0.95      # 训练数据占总体数据比例，测试数据就是 1-train_data_rate
-    valid_data_rate = 0.15      # 验证数据占训练数据比例，验证集在训练过程使用，为了做模型和参数选择
+    train_data_rate = 0.8308      # 训练数据占总体数据比例，测试数据就是 1-train_data_rate
+    valid_data_rate = 0.05      # 验证数据占训练数据比例，验证集在训练过程使用，为了做模型和参数选择
 
-    batch_size = 64
+    batch_size = 512
     learning_rate = 0.001
-    epoch = 20                  # 整个训练集被训练多少遍，不考虑早停的前提下
-    patience = 5                # 训练多少epoch，验证集没提升就停掉
+    epoch = 1000                  # 整个训练集被训练多少遍，不考虑早停的前提下
+    patience = 40               # 训练多少epoch，验证集没提升就停掉
     random_seed = 42            # 随机种子，保证可复现
 
     do_continue_train = False    # 每次训练把上一次的final_state作为下一次的init_state，仅用于RNN类型模型，目前仅支持pytorch
@@ -55,7 +55,7 @@ class Config:
         continue_flag = "continue_"
 
     # 训练模式
-    debug_mode = False  # 调试模式下，是为了跑通代码，追求快
+    debug_mode = False # 调试模式下，是为了跑通代码，追求快
     debug_num = 500  # 仅用debug_num条数据来调试
 
     # 框架参数
@@ -95,7 +95,7 @@ class Data:
         self.std = np.std(self.data, axis=0)
         self.norm_data = (self.data - self.mean)/self.std   # 归一化，去量纲
 
-        self.start_num_in_test = 0      # 测试集中前几天的数据会被删掉，因为它不够一个time_step
+        self.start_num_in_test = 40      # 测试集中前几天的数据会被删掉，因为它不够一个time_step
 
     def read_data(self):                # 读取初始数据
         if self.config.debug_mode:
@@ -191,13 +191,6 @@ def draw(config: Config, origin_data: Data, logger, predict_norm_data: np.ndarra
     label_name = [origin_data.data_column_name[i] for i in config.label_in_feature_index]
     label_column_num = len(config.label_columns)
 
-    # label 和 predict 是错开config.predict_day天的数据的
-    # 下面是两种norm后的loss的计算方式，结果是一样的，可以简单手推一下
-    # label_norm_data = origin_data.norm_data[origin_data.train_num + origin_data.start_num_in_test:,
-    #              config.label_in_feature_index]
-    # loss_norm = np.mean((label_norm_data[config.predict_day:] - predict_norm_data[:-config.predict_day]) ** 2, axis=0)
-    # logger.info("The mean squared error of stock {} is ".format(label_name) + str(loss_norm))
-
     loss = np.mean((label_data[config.predict_day:] - predict_data[:-config.predict_day] ) ** 2, axis=0)
     loss_norm = loss/(origin_data.std[config.label_in_feature_index] ** 2)
     logger.info("The mean squared error of stock {} is ".format(label_name) + str(loss_norm))
@@ -211,12 +204,17 @@ def draw(config: Config, origin_data: Data, logger, predict_norm_data: np.ndarra
             plt.plot(label_X, label_data[:, i], label='label')
             plt.plot(predict_X, predict_data[:, i], label='predict')
             plt.title("Predict stock {} price with {}".format(label_name[i], config.used_frame))
+            mape = np.mean(np.abs((label_data[config.predict_day:, i] - predict_data[:-config.predict_day, i]) / label_data[config.predict_day:, i]))
+            plt.text(0.5, 0.5, "The mean squared percentage error is {}".format(mape), fontsize=10)
+            logger.info("The mean squared percentage error of stock {} is ".format(label_name[i]) + str(mape))
+            print("The mean squared percentage error of stock {} is ".format(label_name[i]) + str(mape))
             logger.info("The predicted stock {} for the next {} day(s) is: ".format(label_name[i], config.predict_day) +
                   str(np.squeeze(predict_data[-config.predict_day:, i])))
             if config.do_figure_save:
                 plt.savefig(config.figure_save_path+"{}predict_{}_with_{}.png".format(config.continue_flag, label_name[i], config.used_frame))
 
         plt.show()
+    return label_data[:, 0], predict_data[:, 0],label_data[:, 1], predict_data[:, 1]
 
 def main(config):
     logger = load_logger(config)
@@ -231,7 +229,10 @@ def main(config):
         if config.do_predict:
             test_X, test_Y = data_gainer.get_test_data(return_label_data=True)
             pred_result = predict(config, test_X)       # 这里输出的是未还原的归一化预测数据
-            draw(config, data_gainer, logger, pred_result)
+            high,high_truth,low,low_truth = draw(config, data_gainer, logger, pred_result)
+
+            output = pd.DataFrame({'high': high, 'low': low, 'high_truth': high_truth, 'low_truth': low_truth})
+            output.to_csv('../data/predict.csv', index=False)
     except Exception:
         logger.error("Run Error", exc_info=True)
 

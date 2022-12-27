@@ -36,7 +36,10 @@ def train(config, logger, train_and_valid_data):
     model = Net(config).to(device)      # 如果是GPU训练， .to(device) 会把模型/数据复制到GPU显存中
     if config.add_train:                # 如果是增量训练，会先加载原模型参数
         model.load_state_dict(torch.load(config.model_save_path + config.model_name))
-    optimizer = torch.optim.Adam(model.parameters(), lr=config.learning_rate)
+    optimizer = torch.optim.AdamW(model.parameters(), lr=config.learning_rate)  # 优化器
+    scheduler = torch.optim.lr_scheduler.OneCycleLR(max_lr=0.01, steps_per_epoch=len(train_loader), epochs=config.epoch,optimizer=optimizer)
+    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.3, patience=10, verbose=True)
+    #scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
     criterion = torch.nn.MSELoss()      # 这两句是定义优化器和loss
 
     valid_loss_min = float("inf")
@@ -58,7 +61,8 @@ def train(config, logger, train_and_valid_data):
                 h_0, c_0 = hidden_train
                 h_0.detach_(), c_0.detach_()    # 去掉梯度信息
                 hidden_train = (h_0, c_0)
-            loss = criterion(pred_Y, _train_Y)  # 计算loss
+            
+            loss = criterion(pred_Y, _train_Y) + 0.008* torch.mean(torch.abs((pred_Y-_train_Y)/_train_Y))  # 计算loss
             loss.backward()                     # 将loss反向传播
             optimizer.step()                    # 用优化器更新参数
             train_loss_array.append(loss.item())
@@ -75,7 +79,7 @@ def train(config, logger, train_and_valid_data):
             _valid_X, _valid_Y = _valid_X.to(device), _valid_Y.to(device)
             pred_Y, hidden_valid = model(_valid_X, hidden_valid)
             if not config.do_continue_train: hidden_valid = None
-            loss = criterion(pred_Y, _valid_Y)  # 验证过程只有前向计算，无反向传播过程
+            loss = criterion(pred_Y, _valid_Y)+0.008* torch.mean(torch.abs((pred_Y-_valid_Y)/_valid_Y))  # 验证过程只有前向计算，无反向传播过程
             valid_loss_array.append(loss.item())
 
         train_loss_cur = np.mean(train_loss_array)
@@ -97,6 +101,8 @@ def train(config, logger, train_and_valid_data):
             if bad_epoch >= config.patience:    # 如果验证集指标连续patience个epoch没有提升，就停掉训练
                 logger.info(" The training stops early in epoch {}".format(epoch))
                 break
+        
+        scheduler.step(valid_loss_cur)      # 学习率衰减
 
 
 def predict(config, test_X):
