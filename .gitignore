@@ -1,5 +1,6 @@
 reference/
 model/*pth
+model/log
 analysis/graph/*
 analysis/checkpoint.pth
 *.pyc
