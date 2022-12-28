@@ -40,7 +40,7 @@ class Config:
     train_data_rate = 0.8308      # 训练数据占总体数据比例，测试数据就是 1-train_data_rate
     valid_data_rate = 0.05      # 验证数据占训练数据比例，验证集在训练过程使用，为了做模型和参数选择
 
-    batch_size = 512
+    batch_size = 1024
     learning_rate = 0.001
     epoch = 1000                  # 整个训练集被训练多少遍，不考虑早停的前提下
     patience = 40               # 训练多少epoch，验证集没提升就停掉
@@ -241,10 +241,6 @@ if __name__=="__main__":
     import argparse
     # argparse方便于命令行下输入参数，可以根据需要增加更多
     parser = argparse.ArgumentParser()
-    # parser.add_argument("-t", "--do_train", default=False, type=bool, help="whether to train")
-    # parser.add_argument("-p", "--do_predict", default=True, type=bool, help="whether to train")
-    # parser.add_argument("-b", "--batch_size", default=64, type=int, help="batch size")
-    # parser.add_argument("-e", "--epoch", default=20, type=int, help="epochs num")
     args = parser.parse_args()
 
     con = Config()
