@@ -62,8 +62,8 @@ def train(config, logger, train_and_valid_data):
                 h_0.detach_(), c_0.detach_()    # 去掉梯度信息
                 hidden_train = (h_0, c_0)
             
-            #loss = criterion(pred_Y, _train_Y) + 0.008* torch.mean(torch.abs((pred_Y-_train_Y)/_train_Y))  # 计算loss
-            loss = torch.mean(torch.abs((pred_Y-_train_Y)/_train_Y))
+            loss = criterion(pred_Y, _train_Y) + 0.008* torch.mean(torch.abs((pred_Y-_train_Y)/_train_Y))  # 计算loss
+            #loss = torch.mean(torch.abs((pred_Y-_train_Y)/_train_Y))
             loss.backward()                     # 将loss反向传播
             optimizer.step()                    # 用优化器更新参数
             train_loss_array.append(loss.item())
@@ -80,8 +80,8 @@ def train(config, logger, train_and_valid_data):
             _valid_X, _valid_Y = _valid_X.to(device), _valid_Y.to(device)
             pred_Y, hidden_valid = model(_valid_X, hidden_valid)
             if not config.do_continue_train: hidden_valid = None
-            #loss = criterion(pred_Y, _valid_Y)+0.008* torch.mean(torch.abs((pred_Y-_valid_Y)/_valid_Y))  # 验证过程只有前向计算，无反向传播过程
-            loss = torch.mean(torch.abs((pred_Y-_valid_Y)/_valid_Y))
+            loss = criterion(pred_Y, _valid_Y)+0.008* torch.mean(torch.abs((pred_Y-_valid_Y)/_valid_Y))  # 验证过程只有前向计算，无反向传播过程
+            #loss = torch.mean(torch.abs((pred_Y-_valid_Y)/_valid_Y))
             valid_loss_array.append(loss.item())
 
         train_loss_cur = np.mean(train_loss_array)
