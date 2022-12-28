@@ -11,7 +11,7 @@ def wy_tradegy(predmax, predmin, truemax, truemin, trueopen, trueover, setwater 
     open_money = trueopen * (1 - setwater)
     ticket = setwater
     res = open_money
-    mid = trueopen
+    mid = (predmax + predmin) / 2
     if truemin < mid:
         theory_ke = int((mid - predmin) / 0.01)
         real_ke = int((mid - truemin) / 0.01)
