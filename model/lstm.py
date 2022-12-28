@@ -38,7 +38,7 @@ def train(config, logger, train_and_valid_data):
         model.load_state_dict(torch.load(config.model_save_path + config.model_name))
     optimizer = torch.optim.AdamW(model.parameters(), lr=config.learning_rate)  # 优化器
     #scheduler = torch.optim.lr_scheduler.OneCycleLR(max_lr=0.005, steps_per_epoch=len(train_loader), epochs=config.epoch,optimizer=optimizer)
-    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.3, patience=10, verbose=True)
+    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=10, verbose=True)
     #scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
     criterion = torch.nn.MSELoss()      # 这两句是定义优化器和loss
 

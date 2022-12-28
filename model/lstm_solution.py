@@ -15,7 +15,7 @@ frame = 'pytorch'
 class Config:
     # 数据参数
     feature_columns = list(range(1, 40))     # 要作为feature的列，按原数据从0开始计算，也可以用list 如 [2,4,6,8] 设置
-    label_columns = [3,4]                  # 要预测的列，按原数据从0开始计算, 如同时预测第四，五列 最低价和最高价
+    label_columns = [1,2,3,4]                  # 要预测的列，按原数据从0开始计算, 如同时预测第四，五列 最低价和最高价
     # label_in_feature_index = [feature_columns.index(i) for i in label_columns]  # 这样写不行
     label_in_feature_index = (lambda x,y: [x.index(i) for i in y])(feature_columns, label_columns)  # 因为feature不一定从0开始
 
@@ -214,7 +214,7 @@ def draw(config: Config, origin_data: Data, logger, predict_norm_data: np.ndarra
                 plt.savefig(config.figure_save_path+"{}predict_{}_with_{}.png".format(config.continue_flag, label_name[i], config.used_frame))
 
         plt.show()
-    return label_data[:, 0], predict_data[:, 0],label_data[:, 1], predict_data[:, 1]
+    return label_data[:, 0], predict_data[:, 0],label_data[:, 1], predict_data[:, 1],label_data[:, 2], predict_data[:, 2],label_data[:,3],predict_data[:,3]
 
 def main(config):
     logger = load_logger(config)
@@ -229,9 +229,9 @@ def main(config):
         if config.do_predict:
             test_X, test_Y = data_gainer.get_test_data(return_label_data=True)
             pred_result = predict(config, test_X)       # 这里输出的是未还原的归一化预测数据
-            high,high_truth,low,low_truth = draw(config, data_gainer, logger, pred_result)
+            close,close_truth,open,open_truth,high,high_truth,low,low_truth = draw(config, data_gainer, logger, pred_result)
 
-            output = pd.DataFrame({'high': high, 'low': low, 'high_truth': high_truth, 'low_truth': low_truth})
+            output = pd.DataFrame({'close':close,'close_truth':close_truth,'open':open,'open_truth':open_truth,'high':high,'high_truth':high_truth,'low':low,'low_truth':low_truth})
             output.to_csv('../data/predict.csv', index=False)
     except Exception:
         logger.error("Run Error", exc_info=True)
