@@ -10,6 +10,7 @@ from sklearn.model_selection import train_test_split
 
 from lstm import train, predict
 
+
 frame = 'pytorch'
 
 class Config:
