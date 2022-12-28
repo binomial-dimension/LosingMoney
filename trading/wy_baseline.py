@@ -7,7 +7,7 @@ def selc_func(x):
     #return 1
 
 @njit(fastmath=True)
-def wy_tradegy(predmax, predmin, truemax, truemin, trueopen, trueover, setwater=0.5, fee_rate=0.003):
+def wy_tradegy(predmax, predmin, truemax, truemin, trueopen, trueover, setwater = 0.5):
     open_money = trueopen * (1 - setwater)
     ticket = setwater
     res = open_money
@@ -20,12 +20,8 @@ def wy_tradegy(predmax, predmin, truemax, truemin, trueopen, trueover, setwater=
             ssum += selc_func(i)
         
         for i in range(min(real_ke, theory_ke)):
-            # Calculate the fee for buying the stock
-            fee = (mid - i * 0.01) * fee_rate
-            # Deduct the fee from the available funds and add it to the result
-            res -= (mid - i * 0.01 - fee) * selc_func(i) / ssum * setwater
-            # Deduct the fee from the ticket
-            ticket += (selc_func(i) / ssum) * setwater - fee_rate * setwater
+            res -= ((mid - i * 0.01) * selc_func(i) / ssum) * setwater
+            ticket += (selc_func(i) / ssum) * setwater
 
 
     if truemax > mid:
@@ -36,12 +32,8 @@ def wy_tradegy(predmax, predmin, truemax, truemin, trueopen, trueover, setwater=
             ssum += selc_func(i)
         
         for i in range(min(real_ke, theory_ke)):
-            # Calculate the fee for selling the stock
-            fee = (mid + i * 0.01) * fee_rate
-            # Add the fee to the result and subtract it from the available funds
-            res += (mid + i * 0.01 - fee) * selc_func(i) / ssum * setwater
-            # Add the fee to the ticket
-            ticket -= (selc_func(i) / ssum) * setwater + fee_rate * setwater
+            res += ((mid + i * 0.01) * selc_func(i) / ssum) * setwater
+            ticket -= (selc_func(i) / ssum) * setwater
 
     res += trueover*(ticket - setwater)
     ticket = setwater
