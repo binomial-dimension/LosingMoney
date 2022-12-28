@@ -37,7 +37,7 @@ class Config:
     shuffle_train_data = True   # 是否对训练数据做shuffle
     use_cuda = True           # 是否使用GPU训练
 
-    train_data_rate = 0.8308      # 训练数据占总体数据比例，测试数据就是 1-train_data_rate
+    train_data_rate = 0.83      # 训练数据占总体数据比例，测试数据就是 1-train_data_rate
     valid_data_rate = 0.05      # 验证数据占训练数据比例，验证集在训练过程使用，为了做模型和参数选择
 
     batch_size = 1024
