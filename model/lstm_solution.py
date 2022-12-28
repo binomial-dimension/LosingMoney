@@ -229,7 +229,7 @@ def main(config):
         if config.do_predict:
             test_X, test_Y = data_gainer.get_test_data(return_label_data=True)
             pred_result = predict(config, test_X)       # 这里输出的是未还原的归一化预测数据
-            close,close_truth,open,open_truth,high,high_truth,low,low_truth = draw(config, data_gainer, logger, pred_result)
+            close_truth,close,open_truth,open,high_truth,high,low_truth,low = draw(config, data_gainer, logger, pred_result)
 
             output = pd.DataFrame({'close':close,'close_truth':close_truth,'open':open,'open_truth':open_truth,'high':high,'high_truth':high_truth,'low':low,'low_truth':low_truth})
             output.to_csv('../data/predict.csv', index=False)
