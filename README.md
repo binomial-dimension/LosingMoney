@@ -1,2 +1,2 @@
 # LosingMoney
-A project to losing moeny by trading stock
+A project to losing money by trading stock
