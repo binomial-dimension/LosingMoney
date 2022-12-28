@@ -3,7 +3,7 @@ from torch.nn import Module, LSTM, Linear
 from torch.utils.data import DataLoader, TensorDataset
 import numpy as np
 
-random_seed = 666
+random_seed = 6666
 torch.manual_seed(random_seed)
 
 class Net(Module):
