@@ -3,6 +3,14 @@ import logging
 from logging.handlers import RotatingFileHandler
 
 def load_logger(config):
+    """load logger
+
+    Args:
+        config (dataclass Config): stroe all the config
+
+    Returns:
+        logger: logger
+    """    
     logger = logging.getLogger()
     logger.setLevel(level=logging.DEBUG)
 
@@ -23,7 +31,7 @@ def load_logger(config):
         file_handler.setFormatter(formatter)
         logger.addHandler(file_handler)
 
-        # 把config信息也记录到log 文件中
+        # save config
         config_dict = {}
         for key in dir(config):
             if not key.startswith("_"):
