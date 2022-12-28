@@ -38,4 +38,3 @@ def wy_tradegy(predmax, predmin, truemax, truemin, trueopen, trueover, setwater 
     res += trueover*(ticket - setwater)
     ticket = setwater
     return res/trueover + setwater
- 
