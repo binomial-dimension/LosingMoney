@@ -1,7 +1,9 @@
 # LosingMoney
 A project to losing money by trading stock
 
-## feature engineering
+[TOC]
+
+## Feature engineering
 In `analysis/corr_check.ipynb`, we process raw data and get total 40 features.
 
 Five basic features are:
@@ -45,16 +47,16 @@ DTW, Soft-DTW, DILATE are loss functions focus on these below mentioned fluctuat
 
 Loss: MSE + 0.3 * MAPE
 
-We have tried several schedulers. We are encouraged by **fast.ai**‘s concpet , we firstly try **OneCycleLR** , and result proved it is not the best :cry: . 
+We have tried several schedulers. We are encouraged by **fast.ai**‘s concpet , we firstly try **`OneCycleLR`** , and result proved it is not the best :cry: .  `ReduceLROnPlateau` is the best.
 
-We finally get MSE of [0.003-0.005],MAPE of [0.01-0.014]
+We finally get MSE of [0.002-0.004],MAPE of [0.01-0.014].
 
 ```bash
-The mean squared error of stock ['close', 'open', 'high', 'low'] is  [0.00572115 0.00338099 0.00487787 0.00325543]
-The mean squared percentage error of stock close is 0.01433726164531638
-The mean squared percentage error of stock open is 0.010846512384708686
-The mean squared percentage error of stock high is 0.013249862787169227
-The mean squared percentage error of stock low is 0.010634444940022284
+The mean squared error of stock ['close', 'open', 'high', 'low'] is  [0.0044853  0.00191087 0.00380957 0.00262649]
+The mean squared percentage error of stock close is 0.01249932274464852
+The mean squared percentage error of stock open is 0.007897970635609071
+The mean squared percentage error of stock high is 0.01154417818663374
+The mean squared percentage error of stock low is 0.009362034251925236
 ```
 
 ## Trading 
@@ -79,5 +81,21 @@ The return curve is labled
 
 ### I’m OUT
 
-Model do have errors. And it may become continual mistakes. We also want to avoid “unpredictable” period. Therefore, we use rolling  windows to calculate last 7 days return. If 
+Model do have errors. And it may become continual mistakes. We also want to avoid “unpredictable” period. Therefore, we use rolling  windows to calculate last ***windows*** days return. If that is smaller than 1, it indicates that our trader is losing its money, so the next day it will be out.
+
+### Adaptive WATER
+
+As we mentioned water is a tunable parameter, a natural concept is adjust water during trading.  Every time the trader trades, water will be multiple by  `open[i+1]/open[i]`. After that, water will be set to ensure it is in [0,1].
+
+### Results comparing
+
+![image-20221228235242023](https://cdn.jsdelivr.net/gh/frinkleko/PicgoPabloBED@master/images_for_wechat/image-20221228235242023.png)
+
+## Team
+
+| name        | work                                                         |
+| ----------- | ------------------------------------------------------------ |
+| Xinjie Shen | Features engineering, prediction model, team leader, report writing |
+|             |                                                              |
+|             |                                                              |
 
