@@ -1,5 +1,5 @@
 # LosingMoney
-A project to losing money by trading stock
+A project to losing money by trading stock.
 
 [TOC]
 
@@ -44,9 +44,9 @@ One thing should be done is features selecting. We haven’t done this.
 One noticeable thing is that we change the loss function for better  fitting. Generally, MSE is the loss function for time-series forecasting tasks. But in many specific tasks, predicted time-series data often perform amplitude fluctuations and time delay fluctuations. Those fluctuations often means disasters for stock markets which acquire correct timing and right amplitude predictions.  Simple MSE may hard to guide model to notice this. 
 
 DTW, Soft-DTW, DILATE are loss functions focus on these below mentioned fluctuations, which can better represent the “**diff**” of two time-series. We choose this as a final index. During training, we realize “**percentage**” is the thing we care in stock price predictions. However, simply MAPE can’t help to converge quickly and correctly. Finally we use the weighted sum of MSE and MAPE. The weights is decided by eval result on both train and valuate set. We hope the model is leaded by MSE firstly, and gradually care more about MAPE.
-
-Loss: MSE + 0.3 * MAPE
-
+$$
+Loss: \text{MSE} + 0.3 * \text{MAPE}
+$$
 We have tried several schedulers. We are encouraged by **fast.ai**‘s concpet , we firstly try **`OneCycleLR`** , and result proved it is not the best :cry: .  `ReduceLROnPlateau` is the best.
 
 We finally get MSE of [0.002-0.004],MAPE of [0.01-0.014].
@@ -98,4 +98,31 @@ As we mentioned water is a tunable parameter, a natural concept is adjust water 
 | Xinjie Shen | Features engineering, prediction model, team leader, report writing |
 |             |                                                              |
 |             |                                                              |
+
+
+
+
+
+# TODO
+
+吴洋
+
++ 修改策略，考虑股数是整数的
+
++ 绘制持股数变化图
++ 对策略与模型做出效果评估
++ 补充注释 *对于类注释（详细描述的属性，行为，类继承和派生关系）;对于函数的注释（详细描述目标，函数参数，原理步骤/算法）*
+
+冠霖
+
++ 将最终的投资结果做出可视化展示的优化
++ 对投资结果与实际数据进行评估
++ 说明所采用的的机器学习方法应用问题时有何优点
++ 补充特折方法和原因
++ 补充注释 *对于类注释（详细描述的属性，行为，类继承和派生关系）;对于函数的注释（详细描述目标，函数参数，原理步骤/算法）*
+
+鑫杰
+
++ 对得到特征进行预处理和筛选
++ 补充注释 *对于类注释（详细描述的属性，行为，类继承和派生关系）;对于函数的注释（详细描述目标，函数参数，原理步骤/算法）*
 
