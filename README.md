@@ -44,7 +44,7 @@ One thing should be done is features selecting. We haven’t done this.
 
 ## LSTM for prediction
 
- In `model` folder we provided prediction solution with both LSTM and transformer, we finally use LTSM.
+ In `model` folder we provided prediction solution with LTSM model.
 
 One noticeable thing is that we change the loss function for better  fitting. Generally, MSE is the loss function for time-series forecasting tasks. But in many specific tasks, predicted time-series data often perform amplitude fluctuations and time delay fluctuations. Those fluctuations often means disasters for stock markets which acquire correct timing and right amplitude predictions.  Simple MSE may hard to guide model to notice this. 
 
