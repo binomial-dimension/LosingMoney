@@ -6,7 +6,7 @@ def load_logger(config):
     """load logger
 
     Args:
-        config (dataclass Config): stroe all the config
+        config (Config): stroe all the config
 
     Returns:
         logger: logger

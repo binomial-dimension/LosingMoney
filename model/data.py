@@ -9,7 +9,7 @@ class Data:
         """init function of the class
         get mean and std of the data, and normalize the data
         Args:
-            config (dataclass of Config): store all the config
+            config (Config): store all the config
         """        
         self.config = config
         self.data, self.data_column_name = self.read_data()

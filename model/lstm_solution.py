@@ -11,6 +11,17 @@ from lstm import train, predict
 frame = 'pytorch'
 
 def draw(config: Config, origin_data: Data, logger, predict_norm_data: np.ndarray):
+    """draw the predict and label data
+
+    Args:
+        config (Config): store all the config
+        origin_data (Data): a class store the origin and processed data
+        logger (Logger): a logger
+        predict_norm_data (np.ndarray): the normalized predicted data
+
+    Returns:
+        four predict and label data: lose_truth,close,open_truth,open,high_truth,high,low_truth,low
+    """    
     label_data = origin_data.data[origin_data.train_num + origin_data.start_num_in_test : ,
                                             config.label_in_feature_index]
     predict_data = predict_norm_data * origin_data.std[config.label_in_feature_index] + \

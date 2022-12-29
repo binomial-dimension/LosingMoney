@@ -16,7 +16,7 @@ class Net(Module):
         """Init function
 
         Args:
-            config (dataclass Config): store all the config
+            config (Config): store all the config
         """        
         super(Net, self).__init__()
         self.lstm = LSTM(input_size=config.input_size, hidden_size=config.hidden_size,
@@ -43,8 +43,8 @@ def train(config, logger, train_and_valid_data):
     This function is used to train the model.
 
     Args:
-        config (object of class Config): store all the config
-        logger (logging.getLogger()): logger
+        config (Config): store all the config
+        logger (Logger): logger
         train_and_valid_data (tuple): train and valid data
     """    
     if config.do_train_visualized:
@@ -164,7 +164,7 @@ def predict(config, test_X):
     """predict the test data
 
     Args:
-        config (object of dataclass config): the config of the model
+        config (Config): the config of the model
         test_X (numpy array): the test data
 
     Returns:
