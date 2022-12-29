@@ -123,5 +123,5 @@ As we mentioned water is a tunable parameter, a natural concept is adjust water 
 鑫杰
 
 - [ ] 对得到特征进行预处理和筛选
-- [ ] 补充注释 *对于类注释（详细描述的属性，行为，类继承和派生关系）;对于函数的注释（详细描述目标，函数参数，原理步骤/算法）*
+- [x] 补充features和LSTM的注释 *对于类注释（详细描述的属性，行为，类继承和派生关系）;对于函数的注释（详细描述目标，函数参数，原理步骤/算法）*
 
