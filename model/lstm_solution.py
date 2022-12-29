@@ -37,6 +37,7 @@ def draw(config: Config, origin_data: Data, logger, predict_norm_data: np.ndarra
     loss = np.mean((label_data[config.predict_day:] - predict_data[:-config.predict_day] ) ** 2, axis=0)
     loss_norm = loss/(origin_data.std[config.label_in_feature_index] ** 2)
     logger.info("The mean squared error of stock {} is ".format(label_name) + str(loss_norm))
+    print("The mean squared error of stock {} is ".format(label_name) + str(loss))
 
     # draw the predict and label data
 

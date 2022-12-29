@@ -49,7 +49,7 @@ Loss: \text{MSE} + 0.3 * \text{MAPE}
 $$
 We have tried several schedulers. We are encouraged by **fast.ai**‘s concept , we firstly try **`OneCycleLR`** , and result proved it is not the best :cry: .  `ReduceLROnPlateau` is the best.
 
-We finally get MSE of [0.002-0.004],MAPE of [0.07-0.013].
+We finally get MSE of [0.002-0.004] (normalized),MAPE of [0.7%-1.3%] (unnormalized).
 
 ```bash
 The mean squared error of stock ['close', 'open', 'high', 'low'] is  [0.0044853  0.00191087 0.00380957 0.00262649]
