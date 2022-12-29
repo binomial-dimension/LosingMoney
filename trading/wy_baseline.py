@@ -54,7 +54,7 @@ def wy_tradegy_int(predmax, predmin, truemax, truemin, trueopen, trueover, setwa
             ssum += selc_func(i)
         
         for i in range(min(real_ke, theory_ke)):
-            tmp = int((selc_func(i) / ssum) * setwater * maxm) / maxm
+            tmp = int((selc_func(i) / ssum) * setwater * maxm / (mid - i * 0.01)) / (maxm / (mid - i * 0.01))
             ticket += tmp
             res -= (mid - i * 0.01) * tmp
 
@@ -67,7 +67,7 @@ def wy_tradegy_int(predmax, predmin, truemax, truemin, trueopen, trueover, setwa
             ssum += selc_func(i)
         
         for i in range(min(real_ke, theory_ke)):
-            tmp = int((selc_func(i) / ssum) * setwater * maxm) / maxm
+            tmp = int((selc_func(i) / ssum) * setwater * maxm / (mid - i * 0.01)) / (maxm / (mid - i * 0.01))
             ticket -= tmp
             res += (mid + i * 0.01) * tmp
             
