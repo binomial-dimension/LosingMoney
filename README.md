@@ -95,7 +95,7 @@ As we mentioned water is a tunable parameter, a natural concept is adjust water 
 
 | name        | work                                                         |
 | ----------- | ------------------------------------------------------------ |
-| Xinjie Shen | Features engineering, prediction model, team leader, report writing |
+| Xinjie Shen | Features engineering, prediction model, team leader, report writing, product manager:sunglasses: |
 |             |                                                              |
 |             |                                                              |
 
