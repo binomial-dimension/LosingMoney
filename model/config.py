@@ -9,7 +9,7 @@ class Config:
     """
     # decide what features to use and what to predict    
     # columns begin from 0
-    feature_columns = list(range(1, 40))
+    feature_columns = list(range(1, 5))
     label_columns = [1,2,3,4]
 
     # get label index in feature
