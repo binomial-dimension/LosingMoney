@@ -103,3 +103,22 @@ class Data:
             label_data = self.norm_data[self.train_num + self.start_num_in_test:, self.config.label_in_feature_index]
             return np.array(test_x), label_data
         return np.array(test_x)
+    
+    def get_noshuffle_train_data(self,return_label_data=True):
+        feature_data = self.norm_data[:self.train_num]
+        # ensure that the time_step is smaller than the test data
+        sample_interval = min(feature_data.shape[0], self.config.time_step)
+        # if the test data is not enough for a time_step, we need to drop them
+        self.start_num_in_test = feature_data.shape[0] % sample_interval
+        time_step_size = feature_data.shape[0] // sample_interval
+
+        # in the test data, each time_step rows data will be a sample, and the two samples are offset by time_step rows
+        # for example: 1-20 rows, 21-40 rows, ... to the end of the data
+        test_x = [feature_data[self.start_num_in_test+i*sample_interval : self.start_num_in_test+(i+1)*sample_interval]
+                   for i in range(time_step_size)]
+        
+        # in real test, we do not have the label data, so we do not need to return it
+        if return_label_data:
+            label_data = self.norm_data[self.start_num_in_test:self.train_num, self.config.label_in_feature_index]
+            return np.array(test_x), label_data
+        return np.array(test_x)
