@@ -3,8 +3,8 @@ from numba import jit, njit, prange
 
 @njit(fastmath=True)
 def selc_func(x):
-    #return np.log(x + 1)
-    return x**2
+    return np.log(x + 1)
+    #return x**4
 
 @njit(fastmath=True)
 def wy_tradegy(predmax, predmin, truemax, truemin, trueopen, trueover, setwater = 0.5):
@@ -42,6 +42,7 @@ def wy_tradegy(predmax, predmin, truemax, truemin, trueopen, trueover, setwater 
    
 @njit(fastmath=True)
 def wy_tradegy_int(predmax, predmin, truemax, truemin, trueopen, trueover, setwater = 0.5, maxm = 100000):
+    maxm *= 1000
     open_money = trueopen * (1 - setwater)
     ticket = setwater
     res = open_money
