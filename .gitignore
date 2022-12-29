@@ -5,3 +5,4 @@ analysis/graph/*
 analysis/checkpoint.pth
 *.pyc
 *.pth
+trading/simpleRL/log
