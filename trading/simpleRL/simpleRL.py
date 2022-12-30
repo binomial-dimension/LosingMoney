@@ -19,14 +19,12 @@ def stock_trade(stock_file):
 
     # The algorithms require a vectorized environment to run
     env = DummyVecEnv([lambda: StockTradingEnv(df)])
-    if os.path.exists('./model/stock_trade'):
-        model = PPO2.load('./model/stock_trade',env=env)
-    else:
-        model = PPO2(MlpPolicy, env, verbose=1, tensorboard_log='./log')
+
+    model = PPO2(MlpPolicy, env, verbose=1, tensorboard_log='./log')
     
     model.learn(total_timesteps=int(1e7),log_interval=1e3)
     try:
-        os.remove('./model/stock_trade')
+        os.mkdir('./model')
         model.save('./model/stock_trade')
     except:
         print('model already exists')
