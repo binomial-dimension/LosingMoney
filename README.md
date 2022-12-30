@@ -61,19 +61,36 @@ The mean squared percentage error of stock low is 0.008190076182250894
 
 ## Trading 
 
-We use xxxx as baseline. One parameter for this strategy is `setwater`, which represents the aggressive level. 
+We use exisiting Quantitative Trading as baseline. One parameter for this strategy is `setwater`, which represents the aggressive level. 
 
 The strategy can be described as below:
 
+Input: Realtime Price, Predict Max Price, Predict Min Price
 
+Output: The increased money
 
+Parameters: Max money, account position, distribute function, window length
 
+This is the step in one day trading.
+
+1.  For one day, select a Middle Price (open price). Divide several dispersed position from the middle to the predict price.
+2.  Calculate the distribute function at every price and normalization it.
+3. Set Sell and Sold orders at every price with the distribute function.
+4. Reset the account position by buying stocks in the end of day.
+
+This method can proved the rate of success of trading. Also can earn the price difference in one day even if do not sell or buy stocks. This method is popular in China Stock Market now. Most of stocks the seller and the buyer are all the same people since they can use this method to harvest others quickly.
 
 However, considering our model certainly have some errors, we also designed several techniques to acquire best return.
+
+### Distribute Function
+
+The key of this trade method is the distribute function. It is about how many stocks will be sold or bought on each price. $f(x)=x^2$ means we consider our predict is more important. $f(x)=log(x+1)$ means we consider do not lose money is more important. Finally we choose the $f(x) = x + 1.1^{-x}$ which balance the strategy.
 
 ### BIAS exists!
 
 As we just mentioned, our strategy feels terrible when predicted high is actually lower than low truth (same as the predicted low). So the set a bias to “adjust” the predicted high and low to have more chances to trade is a natural idea.
+
+When the predict result is not accurate, the trade method will not work. That's why we need bias.
 
 The bias was calculated as max(MAPE)*mean(val of train data), which is finally 50. Therefore, the` high[i] `and` low[i]`change to ` high[i]+50 `and` low[i]-50`.
 
@@ -87,9 +104,41 @@ Model do have errors. And it may become continual mistakes. We also want to avoi
 
 As we mentioned water is a tunable parameter, a natural concept is adjust water during trading.  Every time the trader trades, water will be multiple by  `open[i+1]/open[i]`. After that, water will be set to ensure it is in [0,1].
 
-### Results comparing
+### Reinforce Learning
 
-![image-20221228235242023](https://cdn.jsdelivr.net/gh/frinkleko/PicgoPabloBED@master/images_for_wechat/image-20221228235242023.png)
+For adjusting the water better, we create a Reinforce Learning method to get better water series.
+
+xxxxxxx
+
+### Dilution the price
+
+In this problem, the price is set to near 4000. But the real stock should trade at least 100 stock for one time, which is 40,000 yuan for one trade action. It is seriously unreasonable. Therefore, we have another result that adjust the price from near 4000 to near 4 which is dilution the price for 1000 times. Here is the reward about the principle when the price is 4000.
+
+![picture_logmoney.png](images/logmoney.png)
+The x-axis is log(10, Principle)
+
+## Results comparing
+
+For the several situations, we prepare four results.
+
+### 1. Baseline with 4000+ price
+
+![picture_baseline4000](images/baseline4000.png)
+
+### 2. Baseline with 1000x dilution
+
+![picture_baseline4](images/baseline4.png)
+
+### 3. Reinforce Learning with 4000+ price
+
+![picture_rl4000](images/rl4000.png)
+
+### 4. Reinforce Learning with 1000x dilution and quantitative trading
+
+![picture_rlq4](images/rlq4.png)
+
+### Summary
+For the problem, it shows that reinforce learning method combine with quantitative trading method is better than baseline while the price is 4000+. However, when the stock has 1000x dilution, the origin method is better than reinforce learning since the prediction is quiet accurate. The best result is the baseline with 1000x dilution, which got 560% profit.
 
 ## Team
 
@@ -125,3 +174,4 @@ As we mentioned water is a tunable parameter, a natural concept is adjust water 
 - [ ] 对得到特征进行预处理和筛选
 - [x] 补充features和LSTM的注释 *对于类注释（详细描述的属性，行为，类继承和派生关系）;对于函数的注释（详细描述目标，函数参数，原理步骤/算法）*
 
+![image-20221228235242023](https://cdn.jsdelivr.net/gh/frinkleko/PicgoPabloBED@master/images_for_wechat/image-20221228235242023.png)
