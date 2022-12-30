@@ -138,17 +138,19 @@ class StockTradingEnv(gym.Env):
 
         #     self.net_worth = self.balance + self.shares_held * current_price
         if action_type < 1:
-            self.shares_held += amount
+            self.percent_token += amount
         elif action_type < 2:
-            self.shares_held -= amount
+            self.percent_token -= amount
         predhigh = self.df.loc[self.current_step, 'high']
         predlow = self.df.loc[self.current_step, 'low']
         truehigh = self.df.loc[self.current_step, 'high_truth']
         truelow = self.df.loc[self.current_step, 'low_truth']
         trueopen = self.df.loc[self.current_step, 'open_truth']
         trueclose = self.df.loc[self.current_step, 'close_truth']
-        self.balance *= wy_tradegy_int(predhigh,predlow,truehigh,truelow,trueopen,trueclose,setwater = self.shares_held,maxm=self.balance) # 好麻烦 你写 我不会文件输入
+        self.balance *= wy_tradegy_int(predhigh,predlow,truehigh,truelow,trueopen,trueclose,setwater = self.percent_token,maxm=self.balance * 1000) 
+        self.balance *= 0.99989
         self.net_worth = self.balance
+        self.shares_held = int(self.balance / current_price) * self.percent_token
         if self.net_worth > self.max_net_worth:
             self.max_net_worth = self.net_worth
 
@@ -184,7 +186,7 @@ class StockTradingEnv(gym.Env):
         self.cost_basis = 0
         self.total_shares_sold = 0
         self.total_sales_value = 0
-
+        self.percent_token = 0
         # pass test dataset to environment
         if new_df:
             self.df = new_df
