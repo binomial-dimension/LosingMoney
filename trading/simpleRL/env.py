@@ -64,40 +64,36 @@ class StockTradingEnv(gym.Env):
 
         action_type = action[0]
         amount = action[1]
-        # if action_type < 1:
-        #     # Buy amount % of balance in shares
-        #     total_possible = int(self.balance / current_price)
-        #     shares_bought = int(total_possible * amount)
-        #     prev_cost = self.cost_basis * self.shares_held
-        #     additional_cost = shares_bought * current_price
 
-        #     fee = shares_bought/10000*1.1
-        #     additional_cost += fee
-
-        #     self.balance -= additional_cost
-        #     self.cost_basis = (
-        #         prev_cost + additional_cost) / (self.shares_held + shares_bought)
-        #     self.shares_held += shares_bought
-
-        # elif action_type < 2:
-        #     # Sell amount % of shares held
-        #     shares_sold = int(self.shares_held * amount)
-
-        #     fee = shares_sold/10000*1.1
-        #     shares_sold -= fee
-            
-        #     self.balance += shares_sold * current_price
-        #     self.shares_held -= shares_sold
-        #     self.total_shares_sold += shares_sold
-        #     self.total_sales_value += shares_sold * current_price
-
-        #     self.net_worth = self.balance + self.shares_held * current_price
         if action_type < 1:
-            self.shares_held += amount
+            # Buy amount % of balance in shares
+            total_possible = int(self.balance / current_price)
+            shares_bought = int(total_possible * amount)
+            prev_cost = self.cost_basis * self.shares_held
+            additional_cost = shares_bought * current_price
+
+            fee = shares_bought/10000*1.1
+            additional_cost += fee
+
+            self.balance -= additional_cost
+            self.cost_basis = (
+                prev_cost + additional_cost) / (self.shares_held + shares_bought)
+            self.shares_held += shares_bought
+
         elif action_type < 2:
-            self.shares_held -= amount
-        self.balance *= wy_tradegy_int(...... setwater = self.shares_held) # 好麻烦 你写 我不会文件输入
-        self.net_worth = self.balance
+            # Sell amount % of shares held
+            shares_sold = int(self.shares_held * amount)
+
+            fee = shares_sold/10000*1.1
+            shares_sold -= fee
+            
+            self.balance += shares_sold * current_price
+            self.shares_held -= shares_sold
+            self.total_shares_sold += shares_sold
+            self.total_sales_value += shares_sold * current_price
+
+        self.net_worth = self.balance + self.shares_held * current_price
+
         if self.net_worth > self.max_net_worth:
             self.max_net_worth = self.net_worth
 
