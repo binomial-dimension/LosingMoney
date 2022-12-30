@@ -108,7 +108,26 @@ As we mentioned water is a tunable parameter, a natural concept is adjust water 
 
 For adjusting the water better, we create a Reinforce Learning method to get better water series.
 
-xxxxxxx
+#### State
+
++ past 40 days open,close,high,low and their predict for current day
++ current balance
++ the numbers of held stocks
++ average price for  current buy in stocks (set to 0 when have no held stocks)
++ total sold numbers
++ total sale valus
+
+#### Action
+
+action is two-element array,the first element indicators sell or buy or hold, the second express the `amount` to sell or buy.
+
+#### Reward
+
+We set reward as the
+$$
+\text{net\_worth}/10^5 + \text{last\_net\_worth}/\text{net\_worth} -2
+$$
+simply express we want more increase on net_worth and less decrease on net_worth
 
 ### Dilution the price
 
