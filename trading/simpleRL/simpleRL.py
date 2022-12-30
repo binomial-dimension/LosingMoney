@@ -4,6 +4,7 @@ import pandas as pd
 from stable_baselines.common.policies import MlpPolicy
 from stable_baselines.common.vec_env import DummyVecEnv
 from stable_baselines import PPO2
+import logging
 
 from env import StockTradingEnv
 
@@ -20,10 +21,15 @@ def stock_trade(stock_file):
 
     # The algorithms require a vectorized environment to run
     env = DummyVecEnv([lambda: StockTradingEnv(df)])
-
-    model = PPO2(MlpPolicy, env, verbose=1, tensorboard_log='./log')
+    if os.path.exists('./model/stock_trade.zip'):
+        logging.info('load model')
+        model = PPO2.load('./model/stock_trade',env=env)
+    else:
+        logging.info('new model')
+        model = PPO2(MlpPolicy, env, verbose=1, tensorboard_log='./log')
     
-    model.learn(total_timesteps=int(1e5),log_interval=1e3)
+    model.learn(total_timesteps=int(1e4),log_interval=1e3)
+    logging.info('save model')
     model.save('./model/stock_trade')
 
     df_test = pd.read_csv('../../data/predict.csv')
