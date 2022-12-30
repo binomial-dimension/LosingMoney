@@ -4,6 +4,7 @@ import pandas as pd
 from stable_baselines.common.policies import MlpPolicy
 from stable_baselines.common.vec_env import DummyVecEnv
 from stable_baselines import PPO2
+
 from env import StockTradingEnv
 
 import numpy as np
@@ -22,12 +23,8 @@ def stock_trade(stock_file):
 
     model = PPO2(MlpPolicy, env, verbose=1, tensorboard_log='./log')
     
-    model.learn(total_timesteps=int(1e7),log_interval=1e3)
-    try:
-        os.mkdir('./model')
-        model.save('./model/stock_trade')
-    except:
-        print('model already exists')
+    model.learn(total_timesteps=int(1e5),log_interval=1e3)
+    model.save('./model/stock_trade')
 
     df_test = pd.read_csv('../../data/predict.csv')
 
