@@ -49,7 +49,7 @@ Loss: \text{MSE} + 0.3 * \text{MAPE}
 $$
 We have tried several schedulers. We are encouraged by **fast.ai**‘s concept , we firstly try **`OneCycleLR`** , and result proved it is not the best :cry: .  `ReduceLROnPlateau` is the best.
 
-We finally get MSE of [0.002-0.003] (normalized),MAPE of [0.7%-1.3%] (unnormalized).
+We finally get MSE of [0.001-0.004] (normalized),MAPE of [0.6%-1.1%] (unnormalized).
 
 ```bash
 The mean squared error of stock ['close', 'open', 'high', 'low'] is  [0.00333154 0.00114485 0.00204022 0.0019974 ]
@@ -106,7 +106,7 @@ As we mentioned water is a tunable parameter, a natural concept is adjust water 
 
 ### Reinforce Learning
 
-For adjusting the water better, we create a Reinforce Learning method to get better water series.
+For adjusting the water better, we create a Reinforce Learning method to get better water series. We use MLPpolicy and PPO2 optimizer.
 
 #### State
 
@@ -115,7 +115,7 @@ For adjusting the water better, we create a Reinforce Learning method to get bet
 + the numbers of held stocks
 + average price for  current buy in stocks (set to 0 when have no held stocks)
 + total sold numbers
-+ total sale valus
++ total sale values
 
 #### Action
 
@@ -125,9 +125,9 @@ action is two-element array,the first element indicators sell or buy or hold, th
 
 We set reward as the
 $$
-\text{net\_worth}/10^5 + \text{last\_net\_worth}/\text{net\_worth} -2
+0.8*\text{net\_worth}/10^5 + 0.2*\text{last\_net\_worth}/\text{net\_worth} -1
 $$
-simply express we want more increase on net_worth and less decrease on net_worth
+simply express we want more increase on net_worth and less decrease on net_worth.
 
 ### Dilution the price
 
@@ -138,7 +138,7 @@ The x-axis is log(10, Principle)
 
 ## Results comparing
 
-For the several situations, we prepare four results.
+For the several situations, we prepare four results. For noticeable details, we regard trading fee as **“万1.1”**.
 
 ### 1. Baseline with 4000+ price
 
@@ -163,7 +163,7 @@ For the problem, it shows that reinforce learning method combine with quantitati
 
 | name        | work                                                         |
 | ----------- | ------------------------------------------------------------ |
-| Xinjie Shen | Features engineering, prediction model, team leader, report writing, product manager:sunglasses: |
+| Xinjie Shen | Features engineering, prediction model, RL model, team leader, report writing, product manager:sunglasses: |
 |             |                                                              |
 |             |                                                              |
 
@@ -192,5 +192,3 @@ For the problem, it shows that reinforce learning method combine with quantitati
 
 - [ ] 对得到特征进行预处理和筛选
 - [x] 补充features和LSTM的注释 *对于类注释（详细描述的属性，行为，类继承和派生关系）;对于函数的注释（详细描述目标，函数参数，原理步骤/算法）*
-
-![image-20221228235242023](https://cdn.jsdelivr.net/gh/frinkleko/PicgoPabloBED@master/images_for_wechat/image-20221228235242023.png)
