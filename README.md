@@ -92,7 +92,7 @@ As we just mentioned, our strategy feels terrible when predicted high is actuall
 
 When the predict result is not accurate, the trade method will not work. That's why we need bias.
 
-The bias was calculated as max(MAPE)*mean(val of train data), which is finally 50. Therefore, the` high[i] `and` low[i]`change to ` high[i]+50 `and` low[i]-50`.
+The bias was calculated as max(MAPE)*mean(val of train data), which is finally 50. Therefore, the` high[i] `and` low[i]`change to ` high[i]+10 `and` low[i]-10`.
 
 The return curve is labled 
 
