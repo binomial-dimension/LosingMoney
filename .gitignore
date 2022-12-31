@@ -6,3 +6,4 @@ analysis/checkpoint.pth
 *.pyc
 *.pth
 trading/simpleRL/log
+trading/simpleRL/model
