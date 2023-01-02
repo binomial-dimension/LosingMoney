@@ -1,3 +1,4 @@
+from ..wy_baseline import wy_tradegy_int
 import random
 import json
 import gym
@@ -6,8 +7,6 @@ import pandas as pd
 import numpy as np
 import seaborn as sns
 sns.set()
-
-from ..wy_baseline import wy_tradegy_int
 
 np.random.seed(0)
 
@@ -22,8 +21,10 @@ MAX_DAY_CHANGE = 1
 INITIAL_ACCOUNT_BALANCE = 100000
 
 
+"""
+A stock trading environment for OpenAI gym
+"""
 class StockTradingEnv(gym.Env):
-    """A stock trading environment for OpenAI gym"""
     metadata = {'render.modes': ['human']}
 
     def __init__(self, df):
@@ -40,12 +41,17 @@ class StockTradingEnv(gym.Env):
         self.observation_space = spaces.Box(
             low=0, high=1, shape=(4*41 + 6,), dtype=np.float16)
 
+
     def _next_observation(self):
         obs1 = np.array([
-            self.df.loc[self.current_step - 40:self.current_step, 'open_truth'] + self.df.loc[self.current_step, 'open'] / MAX_SHARE_PRICE,
-            self.df.loc[self.current_step - 40:self.current_step, 'high_truth'] + self.df.loc[self.current_step, 'high'] / MAX_SHARE_PRICE,
-            self.df.loc[self.current_step - 40:self.current_step, 'low_truth'] + self.df.loc[self.current_step, 'low'] / MAX_SHARE_PRICE,
-            self.df.loc[self.current_step - 40:self.current_step, 'close_truth'] + self.df.loc[self.current_step, 'close'] / MAX_SHARE_PRICE,
+            self.df.loc[self.current_step - 40:self.current_step, 'open_truth'] +
+            self.df.loc[self.current_step, 'open'] / MAX_SHARE_PRICE,
+            self.df.loc[self.current_step - 40:self.current_step, 'high_truth'] +
+            self.df.loc[self.current_step, 'high'] / MAX_SHARE_PRICE,
+            self.df.loc[self.current_step - 40:self.current_step, 'low_truth'] +
+            self.df.loc[self.current_step, 'low'] / MAX_SHARE_PRICE,
+            self.df.loc[self.current_step - 40:self.current_step, 'close_truth'] +
+            self.df.loc[self.current_step, 'close'] / MAX_SHARE_PRICE,
         ])
         obs1 = obs1.flatten()
         obs2 = np.array([
@@ -59,8 +65,9 @@ class StockTradingEnv(gym.Env):
         obs = np.concatenate((obs1, obs2), axis=0)
         return obs
 
+
+    # Set the current price to a random price within the time step
     def _take_action(self, action):
-        # Set the current price to a random price within the time step
         current_price = random.uniform(
             self.df.loc[self.current_step, "open_truth"], self.df.loc[self.current_step, "close_truth"])
 
@@ -87,7 +94,7 @@ class StockTradingEnv(gym.Env):
 
         #     fee = shares_sold/10000*1.1
         #     shares_sold -= fee
-            
+
         #     self.balance += shares_sold * current_price
         #     self.shares_held -= shares_sold
         #     self.total_shares_sold += shares_sold
@@ -104,18 +111,21 @@ class StockTradingEnv(gym.Env):
         truelow = self.df.loc[self.current_step, 'low_truth']
         trueopen = self.df.loc[self.current_step, 'open_truth']
         trueclose = self.df.loc[self.current_step, 'close_truth']
-        self.balance *= wy_tradegy_int(predhigh,predlow,truehigh,truelow,trueopen,trueclose,setwater = self.percent_token,maxm=self.balance * 1000) 
+        self.balance *= wy_tradegy_int(predhigh, predlow, truehigh, truelow, trueopen,
+                                       trueclose, setwater=self.percent_token, maxm=self.balance * 1000)
         self.balance *= 0.99989
         self.net_worth = self.balance
-        self.shares_held = int(self.balance / current_price) * self.percent_token
+        self.shares_held = int(
+            self.balance / current_price) * self.percent_token
         if self.net_worth > self.max_net_worth:
             self.max_net_worth = self.net_worth
 
         if self.shares_held == 0:
             self.cost_basis = 0
 
+
+    # Execute one time step within the environment
     def step(self, action):
-        # Execute one time step within the environment
         self._take_action(action)
         done = False
 
@@ -125,7 +135,8 @@ class StockTradingEnv(gym.Env):
             self.current_step = 41  # loop training
 
         # profits
-        reward = self.net_worth/self.df.loc[self.current_step, 'close_truth'] - 1
+        reward = self.net_worth / \
+            self.df.loc[self.current_step, 'close_truth'] - 1
 
         if self.net_worth <= 0:
             done = True
@@ -134,8 +145,9 @@ class StockTradingEnv(gym.Env):
 
         return obs, reward, done, {}
 
+
+    # Reset the state of the environment to an initial state
     def reset(self, new_df=None):
-        # Reset the state of the environment to an initial state
         self.balance = INITIAL_ACCOUNT_BALANCE
         self.net_worth = INITIAL_ACCOUNT_BALANCE
         self.max_net_worth = INITIAL_ACCOUNT_BALANCE
@@ -148,13 +160,14 @@ class StockTradingEnv(gym.Env):
         if new_df:
             self.df = new_df
 
-        # set current step to 0 
+        # set current step to 0
         self.current_step = 41
 
         return self._next_observation()
 
+
+    # Render the environment to the screen
     def render(self, mode='human', close=False):
-        # Render the environment to the screen
         profit = self.net_worth - INITIAL_ACCOUNT_BALANCE
-        
+
         return self.balance, self.net_worth, profit

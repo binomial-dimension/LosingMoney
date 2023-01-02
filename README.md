@@ -162,6 +162,28 @@ For the several situations, we prepare four results. For noticeable details, we 
 ### Summary
 For the problem, it shows that reinforce learning method combine with quantitative trading method is better than baseline while the price is 4000+. However, when the stock has 1000x dilution, the origin method is better than reinforce learning since the prediction is quiet accurate. The best result is the baseline with 1000x dilution, which got 560% profit.
 
+## File Structure
+
+```bash
+.
+├── README.md
+├── data
+│   ├── ...
+├── models
+│   ├── config.py
+│   ├── data.py # A class to read and preprocess and split the data
+│   ├── lstm.py # LSTM model for time series prediction
+│   ├── lstm_solution.py # The solution for LSTM model
+│   ├── utils.py
+├── trading
+│   ├── simpleRL # The RL model
+│   │   ├── env.py # The environment for RL model
+│   │   ├── simpleRL.py # The solution for RL model
+│   ├── baseline.ipynb # The baseline solutions
+│   ├── wy_baseline.py # Trading tradgeys
+
+```
+
 ## Team
 
 | name        | work                                                         |

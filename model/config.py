@@ -3,17 +3,19 @@ import time
 from dataclasses import dataclass
 frame = "pytorch"
 
+"""
+Config class
+"""
 @dataclass
 class Config:
-    """a datacalss to store all the config
-    """
-    # decide what features to use and what to predict    
+    # decide what features to use and what to predict
     # columns begin from 0
     feature_columns = list(range(1, 5))
-    label_columns = [1,2,3,4]
+    label_columns = [1, 2, 3, 4]
 
     # get label index in feature
-    label_in_feature_index = (lambda x,y: [x.index(i) for i in y])(feature_columns, label_columns)
+    label_in_feature_index = (lambda x, y: [x.index(i) for i in y])(
+        feature_columns, label_columns)
 
     # how many days to predict
     predict_day = 1
@@ -25,7 +27,7 @@ class Config:
     # LSTM hidden size
     hidden_size = 200
     # LSTM layers
-    lstm_layers =  2
+    lstm_layers = 2
     # dropout rate
     dropout_rate = 0.2
     # time step use last n days to predict
@@ -73,7 +75,8 @@ class Config:
     # frame setting
     used_frame = frame
     model_postfix = {"pytorch": ".pth", "keras": ".h5", "tensorflow": ".ckpt"}
-    model_name = "model_" + continue_flag + used_frame + model_postfix[used_frame]
+    model_name = "model_" + continue_flag + \
+        used_frame + model_postfix[used_frame]
 
     # path setting
     train_data_path = "../data/processed.csv"

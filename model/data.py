@@ -2,15 +2,18 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 
+"""
+Read, preprocess and split the data
+
+Args:
+    config (Config): Config class
+"""
 class Data:
-    """a class to read, preprocess and split the data
-    """    
-    def __init__(self, config):
-        """init function of the class
-        get mean and std of the data, and normalize the data
-        Args:
-            config (Config): store all the config
-        """        
+    """
+    Initialize the Data class
+    Get mean and std of the data, and normalize the data
+    """
+    def __init__(self, config):       
         self.config = config
         self.data, self.data_column_name = self.read_data()
 
@@ -28,10 +31,15 @@ class Data:
         # so we need to drop them
         self.start_num_in_test = 40
 
+
+    """
+    Read the data from the csv file
+
+    Returns: data, data_column_name
+        data: the data read from the csv file
+        data_column_name: the column name of the data
+    """
     def read_data(self):
-        """read the data from the csv file
-        return: data, data_column_name
-        """
         # if debug_mode is True, only read the first debug_num rows
         if self.config.debug_mode:
             init_data = pd.read_csv(self.config.train_data_path, nrows=self.config.debug_num,
@@ -40,13 +48,15 @@ class Data:
             init_data = pd.read_csv(self.config.train_data_path, usecols=self.config.feature_columns)
         return init_data.values, init_data.columns.tolist()
 
-    def get_train_and_valid_data(self):
-        """get the train and valid data
 
-        Returns: train_x, valid_x, train_y, valid_y:
-        train_x and train_y are the feature and label data of the train data
-        valid_x and valid_y are the feature and label data of the valid data
-        """
+    """
+    Get the train and valid data
+
+    Returns: train_x, valid_x, train_y, valid_y
+        train_x, train_y: the feature and label data of the train data
+        valid_x, valid_y: the feature and label data of the valid data
+    """
+    def get_train_and_valid_data(self):
         # feature data is the data in the first train_num days
         feature_data = self.norm_data[:self.train_num]
         # label data is the data in the next predict_day days
@@ -77,15 +87,17 @@ class Data:
                                                               shuffle=self.config.shuffle_train_data)
         return train_x, valid_x, train_y, valid_y
 
+
+    """
+    Get the test data
+    
+    Args:
+        return_label_data (bool, optional): if to return the label data. Defaults to False.
+
+    Returns: test_x
+        test_x: the feature data of the test data
+    """
     def get_test_data(self, return_label_data=False):
-        """to get the test data
-
-        Args:
-            return_label_data (bool, optional): if to return the label data. Defaults to False.
-
-        Returns:
-            test_x: np.array, the test feature data
-        """        
         feature_data = self.norm_data[self.train_num:]
         # ensure that the time_step is smaller than the test data
         sample_interval = min(feature_data.shape[0], self.config.time_step)
@@ -104,6 +116,16 @@ class Data:
             return np.array(test_x), label_data
         return np.array(test_x)
     
+    
+    """
+    Get the test data without shuffle
+
+    Args:
+        return_label_data (bool, optional): if to return the label data. Defaults to False.
+
+    Returns: test_x
+        test_x: the feature data of the test data
+    """
     def get_noshuffle_train_data(self,return_label_data=True):
         feature_data = self.norm_data[:self.train_num]
         # ensure that the time_step is smaller than the test data

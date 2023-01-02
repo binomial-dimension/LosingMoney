@@ -16,7 +16,6 @@ sns.set()
 np.random.seed(0)
 
 def stock_trade(stock_file):
-
     # read train set
     df = pd.read_csv(stock_file)
 
@@ -26,13 +25,13 @@ def stock_trade(stock_file):
     # check if model exist
     if os.path.exists('./model/stock_trade.zip'):
         logging.info('load model')
-        model = PPO2.load('./model/stock_trade',env=env)
+        model = PPO2.load('./model/stock_trade', env=env)
     else:
         logging.info('new model')
         model = PPO2(MlpPolicy, env, verbose=1, tensorboard_log='./log')
-    
+
     # train model
-    model.learn(total_timesteps=int(1e4),log_interval=1e3)
+    model.learn(total_timesteps=int(1e4), log_interval=1e3)
     logging.info('save model')
     # save model
     model.save('./model/stock_trade')
@@ -60,33 +59,34 @@ def stock_trade(stock_file):
         actions.append(action)
 
         # get the current state
-        blance,net_worth,profit = env.render()
+        blance, net_worth, profit = env.render()
         blances.append(blance)
         net_worths.append(net_worth)
         profits.append(profit)
 
         if done:
             break
-    return actions,np.array(blances),np.array(net_worths),np.array(profits)
+    return actions, np.array(blances), np.array(net_worths), np.array(profits)
+
 
 def test_a_stock_trade(stock_code='hs300'):
     # train set path
     stock_file = '../../data/predict_train.csv'
 
     # train and test
-    actions,blances,net_worths,profits = stock_trade(stock_file)
+    actions, blances, net_worths, profits = stock_trade(stock_file)
 
     # plot the result
-    fig, ax = plt.subplots(figsize = (20,10))
+    fig, ax = plt.subplots(figsize=(20, 10))
 
     # make the buy and sell point
     buy = []
     for i in range(len(actions)):
-        if actions[i][0][0] <1:
+        if actions[i][0][0] < 1:
             buy.append(i)
     sell = []
     for i in range(len(actions)):
-        if actions[i][0][0] >1 and actions[i][0][0] <2:
+        if actions[i][0][0] > 1 and actions[i][0][0] < 2:
             sell.append(i)
 
     # read the truth
@@ -97,18 +97,20 @@ def test_a_stock_trade(stock_code='hs300'):
 
     # plot the truth and buy and sell point
     ax.plot(close_truth/begin, label='truth')
-    ax.plot(close_truth/begin,marker='^',label='buy',markevery=buy,markersize=5)
-    ax.plot(close_truth/begin,marker='v',label='sell',markevery=sell,markersize=5)
+    ax.plot(close_truth/begin, marker='^',
+            label='buy', markevery=buy, markersize=5)
+    ax.plot(close_truth/begin, marker='v',
+            label='sell', markevery=sell, markersize=5)
 
     # plot the net_worth
     #ax.plot(blances/blances[0], label='blance')
     ax.plot(net_worths/net_worths[0], label='net_worth')
     #ax.plot(profits/100, label='profit (x100)')
 
-
     plt.xlabel('Time [days]')
     ax.legend()
     plt.savefig(f'./img/{stock_code}.png')
+
 
 if __name__ == '__main__':
 
