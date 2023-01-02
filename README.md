@@ -35,7 +35,10 @@ The heatmap is showed as below.
 
 ![image-20221228171449388](https://cdn.jsdelivr.net/gh/frinkleko/PicgoPabloBED@master/images_for_wechat/image-20221228171449388.png)
 
-One thing should be done is features selecting. We haven’t done this.
+We use Z-score preprocess, which is 
+$$
+x' = \frac{x - \mu}{\delta}
+$$
 
 ## LSTM for prediction
 
