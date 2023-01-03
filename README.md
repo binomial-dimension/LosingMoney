@@ -46,6 +46,8 @@ $$
 x' = \frac{x - \mu}{\delta}
 $$
 
+For features selection, we simply use the **Mutual Information metric**. The results are adjusted latterly by the loss in val set in LSTM model, which is introduced in following.
+
 ## LSTM for prediction
 
  In `model` folder we provided prediction solution with LTSM model.
