@@ -35,7 +35,13 @@ The heatmap is showed as below.
 
 ![image-20221228171449388](https://cdn.jsdelivr.net/gh/frinkleko/PicgoPabloBED@master/images_for_wechat/image-20221228171449388.png)
 
-We use Z-score preprocess, which is 
+In current case, we don’t have `nan` data. However, most features don’t follow norm distribution.
+
+![image-20230103185510480](C:/Users/frink/AppData/Roaming/Typora/typora-user-images/image-20230103185510480.png)
+
+One approach to process non-norm data is use `box-cox` transform. We use it and for more “norm” features, which help our predict model. 
+
+We then use Z-score preprocess, which is 
 $$
 x' = \frac{x - \mu}{\delta}
 $$
