@@ -197,9 +197,8 @@ For the problem, it shows that reinforce learning method combine with quantitati
 | name        | work                                                         |
 | ----------- | ------------------------------------------------------------ |
 | Xinjie Shen | Features engineering, prediction model, RL model, team leader, report writing, product manager:sunglasses: |
-|  Yang Wu    |   Trading algorithm design, report writing, mathmodel design, algorithm test  |
-| Guanlin Chen | Report writing, advisor                                      |
-
+|  Yang Wu    |  Trading algorithm design, report writing, math model design, algorithm test  |
+| Guanlin Chen | Report writing, advisor, algorithm test                      |
 
 
 
