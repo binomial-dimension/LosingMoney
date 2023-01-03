@@ -194,34 +194,10 @@ For the problem, it shows that reinforce learning method combine with quantitati
 
 ## Team
 
-| name        | work                                                         |
-| ----------- | ------------------------------------------------------------ |
-| Xinjie Shen | Features engineering, prediction model, RL model, team leader, report writing, product manager:sunglasses: |
-|             |                                                              |
-|             |                                                              |
+| name         | work                                                         |
+| ------------ | ------------------------------------------------------------ |
+| Xinjie Shen  | Features engineering, prediction model, RL model, team leader, report writing, product manager:sunglasses: |
+| Yang Wu      | Baseline trading, report writing                             |
+| Guanlin Chen | Report writing, advisor                                      |
 
 
-
-
-
-# TODO
-
-吴洋
-
-- [ ] 修改策略，考虑股数是整数的
-- [ ] 绘制持股数变化图
-- [ ] 对策略与模型做出效果评估
-- [ ] 补充注释 *对于类注释（详细描述的属性，行为，类继承和派生关系）;对于函数的注释（详细描述目标，函数参数，原理步骤/算法）*
-
-冠霖
-
-- [ ] 将最终的投资结果做出可视化展示的优化
-- [ ] 对投资结果与实际数据进行评估
-- [ ] 说明所采用的的机器学习方法应用问题时有何优点
-- [ ] 补充特折方法和原因
-- [ ] 补充注释 *对于类注释（详细描述的属性，行为，类继承和派生关系）;对于函数的注释（详细描述目标，函数参数，原理步骤/算法）*
-
-鑫杰
-
-- [ ] 对得到特征进行预处理和筛选
-- [x] 补充features和LSTM的注释 *对于类注释（详细描述的属性，行为，类继承和派生关系）;对于函数的注释（详细描述目标，函数参数，原理步骤/算法）*
