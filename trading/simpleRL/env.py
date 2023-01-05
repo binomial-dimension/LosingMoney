@@ -1,4 +1,3 @@
-from ..wy_baseline import wy_tradegy_int
 import random
 import json
 import gym
@@ -7,6 +6,8 @@ import pandas as pd
 import numpy as np
 import seaborn as sns
 sns.set()
+
+from wy_baseline import wy_tradegy_int
 
 np.random.seed(0)
 
@@ -40,6 +41,7 @@ class StockTradingEnv(gym.Env):
         # Prices contains the OHCL values for the last five prices
         self.observation_space = spaces.Box(
             low=0, high=1, shape=(4*41 + 6,), dtype=np.float16)
+        self.percent_token = 0.1
 
 
     def _next_observation(self):
@@ -103,8 +105,12 @@ class StockTradingEnv(gym.Env):
         #     self.net_worth = self.balance + self.shares_held * current_price
         if action_type < 1:
             self.percent_token += amount
+            self.percent_token = min(self.percent_token, 1)
+            self.percent_token = max(self.percent_token, 0)
         elif action_type < 2:
             self.percent_token -= amount
+            self.percent_token = min(self.percent_token, 1)
+            self.percent_token = max(self.percent_token, 0)
         predhigh = self.df.loc[self.current_step, 'high']
         predlow = self.df.loc[self.current_step, 'low']
         truehigh = self.df.loc[self.current_step, 'high_truth']
@@ -155,7 +161,7 @@ class StockTradingEnv(gym.Env):
         self.cost_basis = 0
         self.total_shares_sold = 0
         self.total_sales_value = 0
-        self.percent_token = 0
+        self.percent_token = 0.1
         # pass test dataset to environment
         if new_df:
             self.df = new_df
