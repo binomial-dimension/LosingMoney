@@ -6,6 +6,5 @@ scikit-learn
 torch
 numba
 talib
-stable_baseline[mpi]
-tensorflow==1.15.0
+stable_baseline3
 gym
