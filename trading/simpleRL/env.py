@@ -117,9 +117,10 @@ class StockTradingEnv(gym.Env):
         truelow = self.df.loc[self.current_step, 'low_truth']
         trueopen = self.df.loc[self.current_step, 'open_truth']
         trueclose = self.df.loc[self.current_step, 'close_truth']
-        self.balance *= wy_tradegy_int(predhigh, predlow, truehigh, truelow, trueopen,
-                                       trueclose, setwater=self.percent_token, maxm=self.balance * 1000)
-        self.balance *= 0.99989
+        if action_type < 2:
+            self.balance *= wy_tradegy_int(predhigh, predlow, truehigh, truelow, trueopen,
+                                        trueclose, setwater=self.percent_token, maxm=self.balance*1000)
+            self.balance *= 0.99989
         self.net_worth = self.balance
         self.shares_held = int(
             self.balance / current_price) * self.percent_token
@@ -142,7 +143,7 @@ class StockTradingEnv(gym.Env):
 
         # profits
         reward = self.net_worth / \
-            self.df.loc[self.current_step, 'close_truth'] - 1
+            INITIAL_ACCOUNT_BALANCE - 1  # 1.0
 
         if self.net_worth <= 0:
             done = True
