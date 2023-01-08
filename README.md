@@ -3,7 +3,12 @@ A project to losing money by trading stock. [Github repository](https://github.c
 
 [TOC]
 
+## Intro
+
+In this project, we try to win some money from stock market by trading **HS300** with ML approach.  We firstly make lots of features and predict the price with LSTM. For better prediction, we process many features and train with data start form 2005. After that, we design baseline and RL strategy for trading. It’s granted that all data use for train is early than 2020/1/1.
+
 ## Feature engineering
+
 In `analysis/corr_check.ipynb`, we process raw data and get total 40 features.
 
 Five basic features are:
@@ -168,7 +173,9 @@ For the several situations, we prepare four results. For noticeable details, we 
 ![picture_rlq4](images/rlq4.png)
 
 ### Summary
-For the problem, it shows that reinforce learning method combine with quantitative trading method is better than baseline while the price is 4000+. However, when the stock has 1000x dilution, the origin method is better than reinforce learning since the prediction is quiet accurate. The best result is the baseline with 1000x dilution, which got 560% profit.
+For the problem, it shows that reinforce learning method combine with quantitative trading method is better than baseline while the price is 4000+. However, when the stock has 1000x dilution, the origin method is better than reinforce learning since the prediction is quiet accurate. The best result is the baseline with 1000x dilution, which got 600% profit.
+
+However, this result **may not be reliable** because we haven’t and can’t measure the impact of our operation to the stock market.
 
 ## File Structure
 
