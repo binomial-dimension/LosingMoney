@@ -192,6 +192,24 @@ For the problem, it shows that reinforce learning method combine with quantitati
 
 ```
 
+## Usage
+
+run predict model by
+
+```powershell
+python lstm_solution.py
+```
+
+run trade baseline in `baseline.ipynb`
+
+run trade RL model by
+
+```
+python simpleRL.
+```
+
+
+
 ## Team
 
 | name        | work                                                         |
