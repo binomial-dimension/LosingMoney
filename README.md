@@ -1,5 +1,5 @@
 # LosingMoney
-A project to losing money by trading stock.
+A project to losing money by trading stock. [Github repository](https://github.com/binomial-dimension/LosingMoney)
 
 [TOC]
 
